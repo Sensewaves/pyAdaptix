@@ -1,28 +1,14 @@
-import json
-import logging
-import requests
-from utils import JsonSerializer
+
+from stream import Stream
 
 
-class HttpClient:
+class Client:
 
-    def __init__(self, url, api_key):
-        self.base_url = url
-        self.api_key=api_key
-        self.streams_url = self.base_url + "/streams"
-        self.devices_url = self.base_url + "/devices"
-        self.configurations_url = self.base_url + "/configurations"
-        self.request_header = {'Content-Type': 'application/json', 'Accept': 'application/json',
-                               'X-API-Key': self.api_key}
-        self.timeout = 1000
+    def __init__(self, base_url=None, api_key=None):
+        self.conf = {'base_url': base_url, 'api_key': api_key}
+        self.Stream = None
 
-    def create_stream(self, stream):
-        json_stream = JsonSerializer(stream).dump()
-        print(json_stream)
-        logging.debug("Stream to send stream" + json_stream)
-        r = requests.post(self.streams_url, data=json_stream, headers=self.request_header, timeout=self.timeout)
-        if r.status_code != 200 and r.status_code != 201:
-            logging.error("[Adaptix] POST failed with ERROR " + str(r.status_code) + " " + str(r.text))
-            return None
-        else:
-            return json.loads(r.content)
+    def stream(self, description, name, device_id=None, anomaly_monitoring=None, data_rate=None):
+        self.Stream = Stream(configuration=self.conf, description=description, name=name, device_id=device_id,
+                             anomaly_monitoring=anomaly_monitoring, data_rate=data_rate)
+        return self.Stream
