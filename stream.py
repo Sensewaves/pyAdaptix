@@ -32,6 +32,10 @@ class Stream:
             json_res = json.loads(res.text)
             return json_res
 
-    def fetch(self):
-        return self.http.get(uri=self.uri).text
+    def fetch(self,id=None):
+        if id is None:
+            json_res = json.loads(self.http.get(uri=self.uri).text)
+        else:
+            json_res = json.loads(self.http.get(uri=self.uri+"/"+id).text)
+        return json_res
 
