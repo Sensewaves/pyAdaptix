@@ -1,7 +1,6 @@
 class Stream:
 
-    def __init__(self,stream_type,description,name,device_id,anomaly_monitoring,data_rate):
-        self.type = stream_type
+    def __init__(self,description,name,device_id=None,anomaly_monitoring=None,data_rate=None):
         self.name = name
         self.description = description
         self.device_id = device_id
