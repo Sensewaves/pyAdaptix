@@ -18,12 +18,6 @@ class HttpWrapper:
         self.res = requests.post(self.base_url+uri, data=json_resource, headers=self.request_header, timeout=self.timeout)
         return self.res
 
-    def get(self, resource):
-        self.res = requests.get(resource.url, headers=self.request_header, timeout=self.timeout)
+    def get(self, uri):
+        self.res = requests.get(self.base_url+uri, headers=self.request_header, timeout=self.timeout)
         return self.res
-
-    def is_ok(self):
-        if self.res.status_code == 200 and self.r.status_code == 201:
-            return False
-        else:
-            return True
