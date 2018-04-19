@@ -10,11 +10,10 @@ class CannotCreateStreamError(LookupError):
 
 class Stream:
 
-    def __init__(self, configuration):
+    def __init__(self, connection):
             self.http = http
             self.uri = "streams"
-            self.http = http(url=configuration["base_url"], api_key=configuration["api_key"])
-            self.configuration = configuration
+            self.http = http(url=connection["base_url"], api_key=connection["api_key"])
             self.stream = None
 
     def with_tag(self, tag):
@@ -31,7 +30,7 @@ class Stream:
             logging.error("[Adaptix] POST failed with ERROR " + str(res.status_code) + " " + str(res.text))
         else:
             json_res = json.loads(res.text)
-            return json_res['id']
+            return json_res
 
     def fetch(self):
         return self.http.get(uri=self.uri).text

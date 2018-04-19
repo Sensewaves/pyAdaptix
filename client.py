@@ -10,5 +10,5 @@ class Client:
 
     @property
     def streams(self):
-        self.Stream = Stream(configuration=self.conf)
+        self.Stream = Stream(connection=self.conf)
         return self.Stream
