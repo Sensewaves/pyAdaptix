@@ -38,6 +38,7 @@ tmtagsHistory
 *.sublime-project
 *.sublime-workspace
 .bundle
-
-
 test.py
+py_adaptix/test.py
+py_adaptix.egg-info/
+
