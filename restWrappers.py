@@ -50,10 +50,15 @@ class Pattern:
 
     def create(self, name, description, _from, to, stream_id=None):
         pattern = PatternEntity(name=name, description=description, _from=_from, to=to, stream_id=stream_id)
-
         res = self.http.post(uri=self.uri, payload=pattern)
         if res.status_code != 200 and res.status_code != 201:
             logging.error("[Adaptix] POST failed with ERROR " + str(res.status_code) + " " + str(res.text))
         else:
-
             return res.text
+
+    def fetch(self, pattern_id=None):
+        if pattern_id is None:
+            json_res = json.loads(self.http.get(uri=self.uri).text)
+        else:
+            json_res = json.loads(self.http.get(uri=self.uri + "/" + pattern_id).text)
+        return json_res
