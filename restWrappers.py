@@ -1,5 +1,6 @@
 from http import HttpWrapper as http
 from entities import StreamEntity
+from entities import PatternEntity
 import json
 import logging
 
@@ -13,7 +14,7 @@ class Stream:
     def __init__(self, connection):
             self.http = http
             self.uri = "streams"
-            self.http = http(url=connection["base_url"], api_key=connection["api_key"])
+            self.http = http(url=connection["base_url"], api_key=connection["api_key"], debug_mode=connection["debug_mode"])
             self.stream = None
 
     def with_tag(self, tag):
@@ -32,10 +33,27 @@ class Stream:
             json_res = json.loads(res.text)
             return json_res
 
-    def fetch(self,id=None):
-        if id is None:
+    def fetch(self, stream_id=None):
+        if stream_id is None:
             json_res = json.loads(self.http.get(uri=self.uri).text)
         else:
-            json_res = json.loads(self.http.get(uri=self.uri+"/"+id).text)
+            json_res = json.loads(self.http.get(uri=self.uri+"/"+stream_id).text)
         return json_res
 
+
+class Pattern:
+
+    def __init__(self, connection):
+        self.http = http
+        self.uri = "patterns"
+        self.http = http(url=connection["base_url"], api_key=connection["api_key"], debug_mode=connection["debug_mode"])
+
+    def create(self, name, description, _from, to, stream_id=None):
+        pattern = PatternEntity(name=name, description=description, _from=_from, to=to, stream_id=stream_id)
+
+        res = self.http.post(uri=self.uri, payload=pattern)
+        if res.status_code != 200 and res.status_code != 201:
+            logging.error("[Adaptix] POST failed with ERROR " + str(res.status_code) + " " + str(res.text))
+        else:
+
+            return res.text

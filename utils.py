@@ -8,4 +8,4 @@ class JsonSerializer:
         self.json = json.dumps(instance.__dict__)
 
     def dump(self):
-        return self.json
+        return self.json.replace("_from","from")
